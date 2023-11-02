@@ -17,7 +17,7 @@
         Content-Type: application/x-www-form-urlencoded
 
         grant_type=client_credentials
-        &client_id=<client_id>
+        &client_id=<client_id_of_the_managed_identity>
         &client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer
         &client_assertion=<token from step 6>
         &scope=https://graph.microsoft.com/.default
