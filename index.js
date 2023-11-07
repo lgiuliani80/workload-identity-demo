@@ -28,14 +28,17 @@ app.get('/headers', function(req, res) {
     res.json(req.headers);
 });
 
-app.get('/cert', function(req, res) {
-    let cert = new crypto.X509Certificate(req.clientCertificate.Cert);
-    console.log(cert.verify(caCert.publicKey));
-    console.log(cert.issuer);
-    res.json(cert.toJSON());
-});
-
 app.get('/oauth2/token', async function(req, res) {
+    if (!req.clientCertificate?.Cert) {
+        res.status(400).json({ error: "No client certificate provided" });
+        return;
+    }
+    let cert = new crypto.X509Certificate(req.clientCertificate.Cert);
+    if (!cert.verify(caCert.publicKey)) {
+        res.status(403).json({ error: "Invalid client certificate" });
+        return;
+    }
+
     const jwt = await new jose.SignJWT({ 
             'sub': subject, 
             'name': name

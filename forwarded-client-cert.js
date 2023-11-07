@@ -12,7 +12,7 @@ module.exports.forwardedClientCertMiddleware = function (req, res, next) {
                         isEscaped = true;
                     }
                     else if (c === '"' && !isEscaped) {
-                        result[currentField] = unescape(currentFieldContent);
+                        result[currentField] = decodeURIComponent(currentFieldContent);
                         currentField = '';
                         currentFieldContent = null;
                         delimited = false;
@@ -24,7 +24,7 @@ module.exports.forwardedClientCertMiddleware = function (req, res, next) {
                     if (c === '"' && currentFieldContent.length == 0) {
                         delimited = true;
                     } else if (c === ';') {
-                        result[currentField] = unescape(currentFieldContent);
+                        result[currentField] = decodeURIComponent(currentFieldContent);
                         currentField = '';
                         currentFieldContent = null;
                     } else {
