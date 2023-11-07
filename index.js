@@ -14,7 +14,7 @@ const iss = process.env.ISS_CLAIM;
 var privateKey;
 var caCert;
 
-const VERSION = "1.0.231107.5";
+const VERSION = "1.0.231107.6";
 const alg = 'RS256';
 
 app.use(cors());
