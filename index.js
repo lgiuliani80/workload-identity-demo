@@ -4,20 +4,38 @@ const bodyParser = require('body-parser');
 const jose = require('jose');
 const crypto = require("crypto");
 const fs = require('fs');
-
+const fcc = require('./forwarded-client-cert.js');
 const app = express();
 
-const name = "Luca Giuliani";
-const subject = "AutoPilot";
-const iss = "https://9264-79-37-188-180.ngrok.io";
+const name = process.env.NAME_CLAIM;
+const subject = process.env.SUBJECT_CLAIM || "AutoPilot";
+const iss = process.env.ISS_CLAIM;
 
 var privateKey;
+var caCert;
 
+const VERSION = "1.0.231107.5";
 const alg = 'RS256';
 
 app.use(cors());
+app.use(fcc.forwardedClientCertMiddleware);
 
-app.get('/auth', async function(req, res) {
+app.get('/version', function(req, res) {
+    res.json({ version: VERSION });
+});
+
+app.get('/headers', function(req, res) {
+    res.json(req.headers);
+});
+
+app.get('/cert', function(req, res) {
+    let cert = new crypto.X509Certificate(req.clientCertificate.Cert);
+    console.log(cert.verify(caCert.publicKey));
+    console.log(cert.issuer);
+    res.json(cert.toJSON());
+});
+
+app.get('/oauth2/token', async function(req, res) {
     const jwt = await new jose.SignJWT({ 
             'sub': subject, 
             'name': name
@@ -62,6 +80,8 @@ console.log("Listening on port 3001....");
 console.log("");
 
 async function loadKey() {
-    const pkcs8 = fs.readFileSync('private_key.pem');
+    const pkcs8 = process.env.PRIVATE_KEY || fs.readFileSync(process.env.PRIVATE_KEY_PATH || 'privatekey.pem', 'utf8');
     privateKey = await jose.importPKCS8(pkcs8, alg);
+
+    caCert = new crypto.X509Certificate(process.env.CA_CERT || fs.readFileSync(process.env.CA_CERT_PATH || 'ca.cer', 'utf8'));
 }
