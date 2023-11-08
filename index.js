@@ -7,14 +7,13 @@ const fs = require('fs');
 const fcc = require('./forwarded-client-cert.js');
 const app = express();
 
-const name = process.env.NAME_CLAIM;
 const subject = process.env.SUBJECT_CLAIM || "AutoPilot";
 const iss = process.env.ISS_CLAIM;
 
 var privateKey;
 var caCert;
 
-const VERSION = "1.0.231107.6";
+const VERSION = "1.0.231108.3";
 const alg = 'RS256';
 
 app.use(cors());
@@ -38,6 +37,8 @@ app.get('/oauth2/token', async function(req, res) {
         res.status(403).json({ error: "Invalid client certificate" });
         return;
     }
+
+    let name = cert.subject.split('\n').filter(x => x.startsWith('CN='))[0].substring(3);
 
     const jwt = await new jose.SignJWT({ 
             'sub': subject, 
