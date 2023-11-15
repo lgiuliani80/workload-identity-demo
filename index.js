@@ -8,12 +8,15 @@ const fcc = require('./forwarded-client-cert.js');
 const app = express();
 
 const subject = process.env.SUBJECT_CLAIM || "AutoPilot";
-const iss = process.env.ISS_CLAIM;
+const iss = process.env.ISS_CLAIM || 
+    (process.env.CONTAINER_APP_NAME ? 
+        `https://${process.env.CONTAINER_APP_NAME}.${process.env.CONTAINER_APP_ENV_DNS_SUFFIX}` : 
+        "http://localhost:3001");
 
 var privateKey;
 var caCert;
 
-const VERSION = "1.0.231108.3";
+const VERSION = "1.0.231108.4";
 const alg = 'RS256';
 
 app.use(cors());
