@@ -3,9 +3,14 @@
 1. Creare a User Assigned Managed Identity
 2. Deploy this code to a public endpoint
 3. Set ISS_CLAIM environment variable with the public FQDN of the endpoint (to perform a local test you can as well use a temporary FQDN provided by public services like [ngrok](https://ngrok.com/)).
-4. Create a private key and put it into file privatekey.pem (not encrypted), or set PRIVATE_KEY environment variable 
-   with the private key or set PRIVATE_KEY_FILE environment variable with the path to the private key file.
-5. Export the certificate of your CA to a file and set CA_CERT environment variable to the PEM content of the file OR 
+4. Create a private key (in PKCS#8 format) and put it into file privatekey.pem (not encrypted), or set PRIVATE_KEY environment variable or set PRIVATE_KEY_FILE environment variable with the path to the private key file.
+   Example:
+
+        openssl genpkey -algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
+        # Convert from traditional RSA format
+        openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in old_key.pem -out pkcs8_key.pem
+   
+5. [unless DEMO_MODE=1] Export the certificate of your CA to a file and set CA_CERT environment variable to the PEM content of the file OR 
    set CA_CERT_FILE environment variable to the path to the PEM-encoded certificate file. At the moment you need to specify the very CA 
    (top level or intermediate) that actually emitted the certificate used by the client. No support on certificate chains yet.
 6. Configure the Federated Credential in the UMI created above setting:
@@ -17,7 +22,8 @@
 
    If you have Powershell (Core) you can use the following command:
 
-        Invoke-WebRequest -Uri https://<fqdn>/oauth2/token -CertificateThumbprint <thumbprint> 
+        Invoke-WebRequest -Uri https://<fqdn>/oauth2/token -CertificateThumbprint <thumbprint>
+        # skip the CertificateThumbprint parameter is DEMO_MODE=1
 
    assuming the client certificate is in the User o LocalMachine certificate store. You can browse the contents of those stores either via GUI using:
 
@@ -29,7 +35,7 @@
         dir cert:\CurrentUser\My
         dir cert:\LocalMachine\My
 
-7. Use the token to call Azure OAuth2 token endpoint for client_credentials with client_assertion grant type:
+9. Use the token to call Azure OAuth2 token endpoint for client_credentials with client_assertion grant type:
 
         POST https://login.microsoftonline.com/<tenant>/oauth2/v2.0/token
         Content-Type: application/x-www-form-urlencoded
