@@ -1,42 +1,42 @@
 # Federated Credentials demo
 
-## Come eseguire l'applicativo
+## How to Run the Application
 
-### Prerequisiti
-- Node.js (versione 14 o superiore)
+### Prerequisites
+- Node.js (version 14 or higher)
 - npm
 
-### Installazione delle dipendenze
+### Installing Dependencies
 ```bash
 npm install
 ```
 
-### Avvio dell'applicazione
+### Starting the Application
 
-**Nota importante**: Prima di avviare l'applicazione, è necessario configurare una chiave privata (vedere la sezione "Setup e Configurazione" più sotto per i dettagli sulla generazione della chiave).
+**Important note**: Before starting the application, you need to configure a private key (see the "Setup and Configuration" section below for details on generating the key).
 
-Per avviare l'applicazione in modalità normale (con autenticazione tramite certificato client):
+To start the application in normal mode (with client certificate authentication):
 ```bash
 npm start
 ```
 
-Per avviare l'applicazione in modalità demo (senza richiedere certificati client):
+To start the application in demo mode (without requiring client certificates):
 ```bash
 DEMO_MODE=1 npm start
 ```
 
-L'applicazione si avvierà sulla porta 3001 e sarà disponibile all'indirizzo `http://localhost:3001`.
+The application will start on port 3001 and will be available at `http://localhost:3001`.
 
-### Endpoints disponibili
-- `GET /version` - Restituisce la versione dell'applicazione
-- `GET /headers` - Restituisce gli headers della richiesta
-- `GET /oauth2/token` - Ottiene un token JWT
-- `GET /.well-known/jwks.json` - Restituisce le chiavi pubbliche
-- `GET /.well-known/openid-configuration` - Restituisce la configurazione OpenID
+### Available Endpoints
+- `GET /version` - Returns the application version
+- `GET /headers` - Returns the request headers
+- `GET /oauth2/token` - Obtains a JWT token
+- `GET /.well-known/jwks.json` - Returns the public keys
+- `GET /.well-known/openid-configuration` - Returns the OpenID configuration
 
-## Setup e Configurazione
+## Setup and Configuration
 
-1. Creare a User Assigned Managed Identity
+1. Create a User Assigned Managed Identity
 2. Deploy this code to a public endpoint
 3. Set `ISS_CLAIM` environment variable with the public FQDN of the endpoint (to perform a local test you can as well use a temporary FQDN provided by public services like [ngrok](https://ngrok.com/)) or [devtunnel](https://learn.microsoft.com/en-us/azure/developer/dev-tunnels/get-started?tabs=windows).
 4. Create a private key (in PKCS#8 format) and put it into file `privatekey_pkcs8.pem` (not encrypted), or set PRIVATE_KEY environment variable or set `PRIVATE_KEY_FILE` environment variable with the path to the private key file.
