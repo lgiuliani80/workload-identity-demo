@@ -12,7 +12,7 @@ const iss = process.env.ISS_CLAIM ||
     (process.env.CONTAINER_APP_NAME ? 
         `https://${process.env.CONTAINER_APP_NAME}.${process.env.CONTAINER_APP_ENV_DNS_SUFFIX}` : 
         "http://localhost:3001");
-const demo_mode = process.env.DEMO_MODE === "1" || process.env.DEMO_MODE === "true";
+const DEMO_MODE = process.env.DEMO_MODE === "1" || process.env.DEMO_MODE === "true";
 
 var privateKey;
 var caCert;
@@ -92,8 +92,10 @@ console.log("Listening on port 3001....");
 console.log("");
 
 async function loadKey() {
-    const pkcs8 = process.env.PRIVATE_KEY || fs.readFileSync(process.env.PRIVATE_KEY_PATH || 'privatekey.pem', 'utf8');
+    const pkcs8 = process.env.PRIVATE_KEY || fs.readFileSync(process.env.PRIVATE_KEY_PATH || 'privatekey_pkcs8.pem', 'utf8');
     privateKey = await jose.importPKCS8(pkcs8, alg);
 
-    caCert = new crypto.X509Certificate(process.env.CA_CERT || fs.readFileSync(process.env.CA_CERT_PATH || 'ca.cer', 'utf8'));
+    if (!DEMO_MODE) {
+        caCert = new crypto.X509Certificate(process.env.CA_CERT || fs.readFileSync(process.env.CA_CERT_PATH || 'ca.cer', 'utf8'));
+    }
 }
