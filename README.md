@@ -16,7 +16,7 @@
 6. Configure the Federated Credential in the UMI created above setting:
    - "Issuer URL" to the public FQDN of the endpoint
    - "Subject" to "AutoPilot" (or the value of the SUBJECT_CLAIM environment variable)
-7. Get a token from this IdP by calling, using a proper client certificate:
+7. Get a token from this IdP by calling, using a proper client certificate [unless DEMO_MODE=1]:
 
         GET /oauth2/token
 
