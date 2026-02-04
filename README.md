@@ -2,13 +2,13 @@
 
 1. Creare a User Assigned Managed Identity
 2. Deploy this code to a public endpoint
-3. Set ISS_CLAIM environment variable with the public FQDN of the endpoint (to perform a local test you can as well use a temporary FQDN provided by public services like [ngrok](https://ngrok.com/)).
-4. Create a private key (in PKCS#8 format) and put it into file privatekey.pem (not encrypted), or set PRIVATE_KEY environment variable or set PRIVATE_KEY_FILE environment variable with the path to the private key file.
+3. Set `ISS_CLAIM` environment variable with the public FQDN of the endpoint (to perform a local test you can as well use a temporary FQDN provided by public services like [ngrok](https://ngrok.com/)) or [devtunnel](https://learn.microsoft.com/en-us/azure/developer/dev-tunnels/get-started?tabs=windows).
+4. Create a private key (in PKCS#8 format) and put it into file `privatekey_pkcs8.pem` (not encrypted), or set PRIVATE_KEY environment variable or set `PRIVATE_KEY_FILE` environment variable with the path to the private key file.
    Example:
 
         openssl genpkey -algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
         # Convert from traditional RSA format
-        openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in old_key.pem -out pkcs8_key.pem
+        openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in private_key.pem -out privatekey_pkcs8.pem
    
 5. [unless DEMO_MODE=1] Export the certificate of your CA to a file and set CA_CERT environment variable to the PEM content of the file OR 
    set CA_CERT_FILE environment variable to the path to the PEM-encoded certificate file. At the moment you need to specify the very CA 
@@ -35,7 +35,7 @@
         dir cert:\CurrentUser\My
         dir cert:\LocalMachine\My
 
-9. Use the token to call Azure OAuth2 token endpoint for client_credentials with client_assertion grant type:
+8. Use the token to call Azure OAuth2 token endpoint for client_credentials with client_assertion grant type:
 
         POST https://login.microsoftonline.com/<tenant>/oauth2/v2.0/token
         Content-Type: application/x-www-form-urlencoded
