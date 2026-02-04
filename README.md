@@ -1,5 +1,41 @@
 # Federated Credentials demo
 
+## Come eseguire l'applicativo
+
+### Prerequisiti
+- Node.js (versione 14 o superiore)
+- npm
+
+### Installazione delle dipendenze
+```bash
+npm install
+```
+
+### Avvio dell'applicazione
+
+**Nota importante**: Prima di avviare l'applicazione, è necessario configurare una chiave privata (vedere la sezione "Setup e Configurazione" più sotto per i dettagli sulla generazione della chiave).
+
+Per avviare l'applicazione in modalità normale (con autenticazione tramite certificato client):
+```bash
+npm start
+```
+
+Per avviare l'applicazione in modalità demo (senza richiedere certificati client):
+```bash
+DEMO_MODE=1 npm start
+```
+
+L'applicazione si avvierà sulla porta 3001 e sarà disponibile all'indirizzo `http://localhost:3001`.
+
+### Endpoints disponibili
+- `GET /version` - Restituisce la versione dell'applicazione
+- `GET /headers` - Restituisce gli headers della richiesta
+- `GET /oauth2/token` - Ottiene un token JWT
+- `GET /.well-known/jwks.json` - Restituisce le chiavi pubbliche
+- `GET /.well-known/openid-configuration` - Restituisce la configurazione OpenID
+
+## Setup e Configurazione
+
 1. Creare a User Assigned Managed Identity
 2. Deploy this code to a public endpoint
 3. Set `ISS_CLAIM` environment variable with the public FQDN of the endpoint (to perform a local test you can as well use a temporary FQDN provided by public services like [ngrok](https://ngrok.com/)) or [devtunnel](https://learn.microsoft.com/en-us/azure/developer/dev-tunnels/get-started?tabs=windows).
