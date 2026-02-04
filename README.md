@@ -29,8 +29,6 @@
         dir cert:\CurrentUser\My
         dir cert:\LocalMachine\My
 
-   the l
-
 7. Use the token to call Azure OAuth2 token endpoint for client_credentials with client_assertion grant type:
 
         POST https://login.microsoftonline.com/<tenant>/oauth2/v2.0/token
