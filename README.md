@@ -1,4 +1,4 @@
-# Workload identity demo
+# Federated Credentials demo
 
 1. Creare a User Assigned Managed Identity
 2. Deploy this code to a public endpoint
