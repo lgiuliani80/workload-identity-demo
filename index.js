@@ -12,6 +12,7 @@ const iss = process.env.ISS_CLAIM ||
     (process.env.CONTAINER_APP_NAME ? 
         `https://${process.env.CONTAINER_APP_NAME}.${process.env.CONTAINER_APP_ENV_DNS_SUFFIX}` : 
         "http://localhost:3001");
+const demo_mode = process.env.DEMO_MODE === "1" || process.env.DEMO_MODE === "true";
 
 var privateKey;
 var caCert;
@@ -31,17 +32,21 @@ app.get('/headers', function(req, res) {
 });
 
 app.get('/oauth2/token', async function(req, res) {
-    if (!req.clientCertificate?.Cert) {
-        res.status(400).json({ error: "No client certificate provided" });
-        return;
-    }
-    let cert = new crypto.X509Certificate(req.clientCertificate.Cert);
-    if (!cert.verify(caCert.publicKey)) {
-        res.status(403).json({ error: "Invalid client certificate" });
-        return;
-    }
+    let name = "DEMO_USER";
+    
+    if (!DEMO_MODE) {
+        if (!req.clientCertificate?.Cert) {
+            res.status(400).json({ error: "No client certificate provided" });
+            return;
+        }
+        let cert = new crypto.X509Certificate(req.clientCertificate.Cert);
+        if (!cert.verify(caCert.publicKey)) {
+            res.status(403).json({ error: "Invalid client certificate" });
+            return;
+        }
 
-    let name = cert.subject.split('\n').filter(x => x.startsWith('CN='))[0].substring(3);
+        name = cert.subject.split('\n').filter(x => x.startsWith('CN='))[0].substring(3);
+    }
 
     const jwt = await new jose.SignJWT({ 
             'sub': subject, 
