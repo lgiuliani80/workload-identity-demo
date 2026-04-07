@@ -33,7 +33,7 @@ app.get('/headers', function(req, res) {
 
 app.get('/oauth2/token', async function(req, res) {
     let name = "DEMO_USER";
-    
+
     if (!DEMO_MODE) {
         if (!req.clientCertificate?.Cert) {
             res.status(400).json({ error: "No client certificate provided" });
@@ -55,7 +55,7 @@ app.get('/oauth2/token', async function(req, res) {
         .setProtectedHeader({ alg, typ: 'JWT', kid: '1' })
         .setIssuedAt()
         .setIssuer(iss)
-        .setAudience('api://AzureADTokenExchange')
+        .setAudience(req.query.scope || 'api://AzureADTokenExchange')
         .setExpirationTime('2h')
         .sign(privateKey);
 

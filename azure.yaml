@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: workload-identity-demo
+metadata:
+    template: azd-init@1.23.11
+services:
+    workload-identity-demo:
+        project: .
+        host: containerapp
+        language: js
+        docker:
+            path: Dockerfile
+resources:
+    workload-identity-demo:
+        type: host.containerapp
+        port: 3001

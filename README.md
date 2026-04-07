@@ -3,10 +3,12 @@
 ## How to Run the Application
 
 ### Prerequisites
+
 - Node.js (version 14 or higher)
 - npm
 
 ### Installing Dependencies
+
 ```bash
 npm install
 ```
@@ -16,11 +18,13 @@ npm install
 **Important note**: Before starting the application, you need to configure a private key (see the "Setup and Configuration" section below for details on generating the key).
 
 To start the application in normal mode (with client certificate authentication):
+
 ```bash
 npm start
 ```
 
 To start the application in demo mode (without requiring client certificates):
+
 ```bash
 DEMO_MODE=1 npm start
 ```
@@ -28,6 +32,7 @@ DEMO_MODE=1 npm start
 The application will start on port 3001 and will be available at `http://localhost:3001`.
 
 ### Available Endpoints
+
 - `GET /version` - Returns the application version
 - `GET /headers` - Returns the request headers
 - `GET /oauth2/token` - Obtains a JWT token
@@ -45,7 +50,7 @@ The application will start on port 3001 and will be available at `http://localho
         openssl genpkey -algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
         # Convert from traditional RSA format
         openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in private_key.pem -out privatekey_pkcs8.pem
-   
+
 5. [unless DEMO_MODE=1] Export the certificate of your CA to a file and set CA_CERT environment variable to the PEM content of the file OR 
    set CA_CERT_FILE environment variable to the path to the PEM-encoded certificate file. At the moment you need to specify the very CA 
    (top level or intermediate) that actually emitted the certificate used by the client. No support on certificate chains yet.
@@ -85,4 +90,4 @@ The application will start on port 3001 and will be available at `http://localho
     Replace `<tenant>` with your tenant ID and `<client_id>` with the client ID of the app registration you want to get a token for.  
     Set `<scope>` to the scope you want to get a token for.
 
-8. Use the access token to call the Graph API (or whatever API you want to call)
+9. Use the access token to call the Graph API (or whatever API you want to call)
