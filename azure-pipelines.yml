@@ -1,0 +1,5 @@
+trigger: none
+
+steps:
+- bash: |
+    echo Hello world
