@@ -1,0 +1,12 @@
+# Converted from azure-pipelines.yml
+# Original pipeline had trigger: none (manual trigger only)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo Hello world
